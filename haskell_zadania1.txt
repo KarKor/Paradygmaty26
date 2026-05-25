@@ -1,0 +1,85 @@
+main :: IO ()
+main = do
+  print $ square 4
+  print $ cube 4
+  print $ average 3 8
+  print $ quadraticif 2 4 5
+  print $ quadraticif (-2) 4 6
+  print $ quadraticif 2 4 2
+  print $ quadraticguard 2 4 5
+  print $ quadraticguard (-2) 4 6
+  print $ quadraticguard 2 4 2
+  print $ factorial 4
+  print $ fibonacci 3
+  print $ fibonacci 12
+  print $ minmax 17 1 40
+  print $ sumOfSquares 3 4
+  print $ lastDigit 332
+  print $ lastDigit (-17)
+  
+  
+square :: Int -> Int
+square x = x * x
+
+
+cube :: Int -> Int
+cube x = x * x * x
+
+
+average :: Float -> Float -> Float
+average a b = (a+b) / 2
+
+data Result = Nores
+            | One Double
+            | Two Double Double
+            deriving (Show, Eq)
+
+quadraticif :: Double -> Double -> Double -> Result
+quadraticif a b c =
+  let delta = b*b - 4*a*c
+  in if delta > 0 
+      then Two ((-b - sqrt delta) / (2 * a)) ((-b + sqrt delta) / (2 * a))
+      else if delta == 0
+        then One (-b/(2*a))
+        else Nores
+        
+        
+quadraticguard :: Double -> Double -> Double -> Result
+quadraticguard a b c
+  | delta > 0 = Two x1 x2
+  | delta == 0 = One x0
+  | otherwise = Nores
+  where
+    delta = b*b - 4*a*c
+    x1 = ((-b - sqrt delta) / (2 * a))
+    x2 = ((-b + sqrt delta) / (2 * a))
+    x0 = (-b/(2*a))
+    
+
+factorial :: Int -> Int
+factorial 1 = 1
+factorial a = a * factorial (a-1)
+
+
+fibonacci :: Int -> Int
+fibonacci 0 = 0
+fibonacci 1 = 1
+fibonacci 2 = 1
+fibonacci a = fibonacci (a-1) + fibonacci (a-2)
+
+
+minmax :: Int -> Int -> Int -> Int
+minmax a b c = (max a (max b c)) - (min a (min b c))
+
+
+sumOfSquares :: Int -> Int -> Int
+sumOfSquares a b = a*a+b*b
+
+
+lastDigit :: Int -> Int
+lastDigit a = (abs a `rem` 10)
+
+
+
+
+--
