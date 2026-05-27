@@ -1,0 +1,24 @@
+%2
+
+color(red, green).
+color(red, blue).
+color(green, red).
+color(blue, red).
+color(blue, green).
+color(green, blue).
+
+pokoloruj(Pk, Lu, Ma, Wm, Pd) :-
+    color(Pk, Lu),
+    color(Lu, Pk),
+    color(Lu, Pd),
+    color(Lu, Pd),
+    color(Ma, Lu),
+    color(Ma, Wm),
+    color(Ma, Pd),
+    color(Pd, Lu),
+    color(Pd, Ma),
+    color(Pd, Wm),
+    color(Wm, Pd),
+    color(Wm, Ma).
+
+%3

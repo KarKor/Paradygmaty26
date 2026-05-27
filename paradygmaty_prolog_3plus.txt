@@ -1,0 +1,195 @@
+%zad3%
+
+% Warunek końcowy: gdy X = Y, wynikiem jest X.
+nww(X, X, X).
+
+% Przypadek, gdy X > Y. Odejmujemy Y od X.
+nww(X, Y, Res) :-
+    X > Y,
+    X1 is X - Y,
+    nww(X1, Y, Res).
+
+% Przypadek, gdy X < Y. Odejmujemy X od Y.
+nww(X, Y, Res) :-
+    X < Y,
+    Y1 is Y - X,
+    nww(X, Y1, Res).
+
+%zad4%
+
+% a) Baza wiedzy o produktach - definiujemy relację potrzebuje/2
+potrzebuje(p1, s1).
+potrzebuje(p1, s2).
+
+potrzebuje(p2, s2).
+potrzebuje(p2, s3).
+
+potrzebuje(p3, s1).
+potrzebuje(p3, s4).
+
+% Fakty o samych produktach, aby móc po nich iterować
+produkt(p1).
+produkt(p2).
+produkt(p3).
+
+% b) Spis dostępnych składników
+dostepny(s1).
+dostepny(s2).
+dostepny(s3).
+
+% Zdefiniowane relacje
+% Produkt można wyprodukować, jeśli dla danego produktu X nie brakuje żadnego składnika.
+moznaprodukowac(X) :-
+    produkt(X),
+    \+ (potrzebuje(X, Y), \+ dostepny(Y)).
+
+%zad5%
+
+?- append([olej], [woda], [olej, woda]).
+    Zwróci: true. (lub yes) - Prolog potwierdza, że połączone listy dają wskazaną trzecią listę.
+
+    ?- append([olej], [woda], Co).
+    Zwróci: Co = [olej, woda]. - Prolog łączy dwie listy i wpisuje wynik do zmiennej Co.
+
+    ?- append([olej], Co, [olej, woda]).
+    Zwróci: Co = [woda]. - Prolog odgaduje, jakiej listy brakuje, aby równanie było prawdziwe.
+
+Zastosowania append/3:
+
+    Łączenie list: Tworzenie jednej, złączonej listy z dwóch mniejszych.
+
+    Dzielenie list (dekompozycja): Szukanie brakującej części (jak w przykładzie 3), lub zwracanie wszystkich możliwych podziałów listy na dwie mniejsze.
+
+    Sprawdzanie: Weryfikacja, czy dana lista jest wynikiem sklejenia dwóch innych określonych list.
+
+%zad6%
+
+?- select(X, [1,2,3], L).
+Zwróci:
+Prolog
+
+X = 1, L = [2, 3] ;
+X = 2, L = [1, 3] ;
+X = 3, L = [1, 2].
+
+?- select(a, L, [1,2,3]).
+Zwróci:
+Prolog
+
+L = [a, 1, 2, 3] ;
+L = [1, a, 2, 3] ;
+L = [1, 2, a, 3] ;
+L = [1, 2, 3, a].
+
+
+%zad7%
+
+% Element znajduje się w liście, jeśli jest jej głową.
+należy(X, [X|_]).
+
+% Jeśli nie jest głową, sprawdzamy rekurencyjnie ogon.
+należy(X, [_|Ogon]) :- 
+    należy(X, Ogon).
+
+%zad8%
+
+% Pusta lista ma długość 0.
+długość([], 0).
+
+% Długość listy to długość jej ogona powiększona o 1.
+długość([_|Ogon], Dł) :-
+    długość(Ogon, DłOgona),
+    Dł is DłOgona + 1.
+
+
+%zad 9%
+
+% Suma elementów pustej listy wynosi 0.
+suma([], 0).
+
+% Suma to wartość głowy + suma reszty (ogona).
+suma([Głowa|Ogon], S) :-
+    suma(Ogon, SOgona),
+    S is Głowa + SOgona.
+
+%zad 10%
+
+% Element jest ostatni, jeśli jest jedynym elementem w liście (ogon jest pusty).
+ostatni(X, [X]).
+
+% W przeciwnym razie odrzucamy głowę i szukamy na końcu ogona.
+ostatni(X, [_|Ogon]) :- 
+    ostatni(X, Ogon).
+
+
+%zad 11%
+
+% Odwrotność pustej listy to pusta lista.
+odwróć([], []).
+
+% Aby odwrócić listę, odwracamy jej ogon i doklejamy głowę na sam koniec.
+odwróć([Głowa|Ogon], Odwrocona) :-
+    odwróć(Ogon, OdwroconaOgon),
+    append(OdwroconaOgon, [Głowa], Odwrocona).
+
+
+
+
+%zadania%
+prolog:
+Zadanie 3
+Napisz program obliczający największy wspólny dzielnik dwóch dodatnich liczb całkowitych nww(X, Y, Nww) za pomocą algorytmu Euklidesa z odejmowaniem wg algorytmu zapisanego imperatywnie:
+
+
+function nww(x, y)
+	while x ≠ y do
+		if x > y then x := x – y
+		else y := y – x
+	return x
+
+Zadanie 4
+Fabryka produkuje kilka różnych produktów, nazwijmy je p1, p2 i p3. Produkty są produkowane ze składników, które nazwijmy s1, s2, s3 i s4. Zbuduj prologową bazę danych, która będzie przechowywała następujące informacje:
+a)
+ opis każdego produktu, wyszczególniający które składniki są potrzebne 
+do jego produkcji (na ogół produkt nie wymaga użycia wszystkich 
+składników).
+b) spis dostępnych w tej chwili składników.
+
+Następnie zdefiniuj dwie relacje:
+a) moznaprodukowac(X) — stwierdzająca, że fabryka posiada wszystkie składniki potrzebne do wyprodukowania produktu X.
+b) potrzebuje(X, Y) — stwierdzająca, że produkt X potrzebuje składnika Y.
+Całość należy zaprogramować nie używając bezpośrednio list.
+
+Zadanie 5
+Wykonaj polecenia:
+
+
+?- append([olej], [woda], [olej, woda]).
+
+?- append([olej], [woda], Co).
+
+?- append([olej], Co, [olej, woda]).
+Jakie zastosowania ma instrukcja append?
+
+Zadanie 6
+Wykonaj polecenia:
+
+
+?- select(X,[1,2,3],L).
+?- select(a,L,[1,2,3]).
+Jakie zastosowanie ma instrukcja select?
+
+Zadanie 7
+Zdefiniuj predykat należy(X, Lista), który sprawdza, czy element X należy do listy Lista. Na przykład należy(a, [a, b, c]). powinno zwrócić true.
+
+Zadanie 8
+Zdefiniuj predykat długość(Lista, Dł), który oblicza długość listy Lista i zapisuje ją w Dł.
+
+Zadanie 9
+Napisz predykat suma(Lista, S), który oblicza sumę wszystkich elementów w liście Lista i zapisuje wynik w S.
+
+Zadanie 10
+Zdefiniuj predykat ostatni(X, Lista), który jest prawdziwy, jeśli X jest ostatnim elementem listy Lista.
+
+Zadanie 11
+Zdefiniuj predykat odwróć(Lista, Odwrocona), który zwraca listę w odwrotnej kolejności. Na przykład odwróć([1,2,3], X) powinno zwrócić X = [3,2,1].
